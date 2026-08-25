@@ -8,7 +8,7 @@ The workflow checks upstream once per hour. For every new release it:
 
 1. Downloads the Linux amd64 and arm64 Agent binaries and signed manifests.
 2. Verifies all SHA-256 checksums and the manifest-to-binary binding.
-3. Builds both platforms and starts the bundled Guard with each manifest.
+3. Builds both platforms and smoke-tests the bundled Guard on the native amd64 runner.
 4. Publishes a multi-platform image to GHCR only if every check passes.
 
 ## Image
@@ -39,5 +39,6 @@ For controlled rollouts, pin a versioned tag instead of `latest`.
 
 The base image is pinned by digest. Agent binaries and signed manifests come
 from the upstream GitHub Release. The Guard is inherited from the pinned
-official base image; an incompatible future release fails the smoke test and is
-not published.
+official base image. Both platform manifests are verified before building; an
+incompatible amd64 release also fails the native Guard smoke test and is not
+published.
