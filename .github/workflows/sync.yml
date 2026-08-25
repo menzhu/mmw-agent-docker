@@ -110,8 +110,12 @@ jobs:
                   sleep 0.1
                 done
                 test -S /run/mmwx-guard-agent/guard.sock
-                kill "$pid"
-                wait "$pid" 2>/dev/null || true
+                if kill -0 "$pid" 2>/dev/null; then
+                  kill "$pid"
+                  wait "$pid" 2>/dev/null || true
+                else
+                  wait "$pid"
+                fi
               '
           done
 
